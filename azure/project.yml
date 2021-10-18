@@ -1,0 +1,7 @@
+variables:
+  service_name: prescription-transmission
+  short_service_name: pt
+  service_base_path: 
+  product_display_name: 
+  product_description: 
+  spec_file: prescription-transmission.json
