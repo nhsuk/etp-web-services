@@ -7,7 +7,13 @@ meta:
   schema_version: 1.1
 apigee:
   environments:
-  - name: int
+  - name: internal-dev # Just for PRs
+    api_catalog: []
+    products: []
+    specs:
+      - name: prescription-transmission-internal-dev
+        path: prescription-transmission.json
+  - name: int # For bloomreach prod
     api_catalog: []
     products: []
     specs:
