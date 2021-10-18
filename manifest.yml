@@ -3,13 +3,19 @@ meta:
     name: prescription-transmission
     guid: f5f26970-ce52-4eef-95c5-a169810ae6e3
     spec_guids:
-      - a062e39c-b843-4833-8d24-8fc1434900a0
+      - fac3b3c9-638c-4a00-aa4b-3c7172abe80b
   schema_version: 1.1
 apigee:
   environments:
-  - name: int
+  - name: internal-dev # Just for PRs
     api_catalog: []
     products: []
     specs:
-      - name: prescription-transmission
-        path: transmission-prescription.json
+      - name: prescription-transmission-internal-dev
+        path: prescription-transmission.json
+  - name: int # For bloomreach prod
+    api_catalog: []
+    products: []
+    specs:
+      - name: prescription-transmission-int
+        path: prescription-transmission.json

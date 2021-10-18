@@ -1,11 +1,12 @@
 SHELL=/bin/bash -euo pipefail
 
+.PHONY: install-python install-node install lint clean publish serve check-licenses format release
+
 install-python:
 	poetry install
 
 install-node:
 	npm install
-	cd sandbox && npm install
 
 .git/hooks/pre-commit:
 	cp scripts/pre-commit .git/hooks/pre-commit
@@ -34,7 +35,6 @@ check-licenses:
 format:
 	poetry run black **/*.py
 
-release: clean
-
-test:
-	@echo "Spec only"
+release: publish
+	mkdir -p dist
+	cp -R build/. dist/
