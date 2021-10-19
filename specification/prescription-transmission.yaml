@@ -13,6 +13,7 @@ servers:
 tags: # must be in alphabetical order
   - name: Cats
   - name: Dogs
+  - name: Fish
 paths:
   /pets:
     get:
