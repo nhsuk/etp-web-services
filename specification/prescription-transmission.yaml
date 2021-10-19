@@ -14,6 +14,7 @@ tags: # must be in alphabetical order
   - name: Cats
   - name: Dogs
   - name: Fish
+  - name: Guinia Pigs
 paths:
   /pets:
     get:
