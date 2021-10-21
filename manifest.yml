@@ -8,14 +8,13 @@ meta:
 apigee:
   environments:
   - name: internal-dev # Just for PRs
-    api_catalog: []
-    products: []
+    api_catalog:
+      - edgeAPIProductName: prescription-transmission-internal-dev
+        visibility: true
+        specId: prescription-transmission-internal-dev
+        title: Electronic Transmission of Prescriptions
+    products:
+      - name: prescription-transmission-internal-dev
     specs:
       - name: prescription-transmission-internal-dev
-        path: prescription-transmission.json
-  - name: int # For bloomreach prod
-    api_catalog: []
-    products: []
-    specs:
-      - name: prescription-transmission-int
         path: prescription-transmission.json
