@@ -8,14 +8,10 @@ meta:
 apigee:
   environments:
   - name: internal-dev
-    api_catalog: []
-    products: []
     specs:
       - name: prescription-transmission-internal-dev
         path: prescription-transmission.json
   - name: int
-    api_catalog: []
-    products: []
     specs:
       - name: prescription-transmission-int
         path: prescription-transmission.json
