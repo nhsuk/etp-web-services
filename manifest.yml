@@ -7,14 +7,15 @@ meta:
   schema_version: 1.1
 apigee:
   environments:
-  - name: internal-dev # Just for PRs
-    api_catalog:
-      - edgeAPIProductName: prescription-transmission-internal-dev
-        visibility: true
-        specId: prescription-transmission-internal-dev
-        title: Electronic Transmission of Prescriptions
-    products:
-      - name: prescription-transmission-internal-dev
+  - name: internal-dev
+    api_catalog: []
+    products: []
     specs:
       - name: prescription-transmission-internal-dev
+        path: prescription-transmission.json
+  - name: int
+    api_catalog: []
+    products: []
+    specs:
+      - name: prescription-transmission-int
         path: prescription-transmission.json
