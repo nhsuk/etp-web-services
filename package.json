@@ -1,16 +1,16 @@
 {
-  "name": "prescription-transmission",
+  "name": "etp-web-services",
   "version": "0.0.1",
   "description": "OAS (Swagger v3) API Definition for Template API",
   "scripts": {
-    "lint": "node_modules/.bin/speccy lint -s openapi-tags -s operation-tags specification/prescription-transmission.yaml --skip default-and-example-are-redundant",
-    "publish": "mkdir -p build && node_modules/.bin/speccy resolve specification/prescription-transmission.yaml -i | poetry run python scripts/yaml2json.py | poetry run python scripts/set_version.py > build/prescription-transmission.json",
-    "serve": "node_modules/.bin/speccy serve build/prescription-transmission.json",
+    "lint": "node_modules/.bin/speccy lint -s openapi-tags -s operation-tags specification/etp-web-services.yaml --skip default-and-example-are-redundant",
+    "publish": "mkdir -p build && node_modules/.bin/speccy resolve specification/etp-web-services.yaml -i | poetry run python scripts/yaml2json.py | poetry run python scripts/set_version.py > build/etp-web-services.json",
+    "serve": "node_modules/.bin/speccy serve build/etp-web-services.json",
     "check-licenses": "node_modules/.bin/license-checker --failOn GPL --failOn LGPL"
   },
   "author": "NHS Digital",
   "license": "MIT",
-  "homepage": "https://github.com/NHSDigital/prescription-transmission",
+  "homepage": "https://github.com/NHSDigital/etp-web-services",
   "dependencies": {
     "newman-reporter-htmlextra": "^1.20.1",
     "speccy": "^0.11.0"

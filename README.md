@@ -1,6 +1,6 @@
-# Electronic Transmission of Prescriptions
+# Electronic Transmission of Prescriptions Web Services - REST API
 
-This repository hosts the Electronic Transmission of Prescriptions API Specification
+This repository hosts the Electronic Transmission of Prescriptions Web Services - REST API Specification
 
 ## Contributing
 Contributions to this project are welcome from anyone, providing that they conform to the [guidelines for contribution](https://github.com/NHSDigital/prescription-transmission/blob/master/CONTRIBUTING.md) and the [community code of conduct](https://github.com/NHSDigital/prescription-transmission/blob/master/CODE_OF_CONDUCT.md).
