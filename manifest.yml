@@ -1,6 +1,6 @@
 meta:
   api:
-    name: prescription-transmission
+    name: etp-web-services
     guid: f5f26970-ce52-4eef-95c5-a169810ae6e3
     spec_guids:
       - fac3b3c9-638c-4a00-aa4b-3c7172abe80b
@@ -9,9 +9,9 @@ apigee:
   environments:
   - name: internal-dev
     specs:
-      - name: prescription-transmission-internal-dev
-        path: prescription-transmission.json
+      - name: etp-web-services-internal-dev
+        path: etp-web-services.json
   - name: int
     specs:
-      - name: prescription-transmission-int
-        path: prescription-transmission.json
+      - name: etp-web-services-int
+        path: etp-web-services.json
