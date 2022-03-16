@@ -1,7 +1,16 @@
 openapi: 3.0.1
 x-nhs-api-spec-guid: fac3b3c9-638c-4a00-aa4b-3c7172abe80b
 info:
-  title: ETP Web Service
+  title: Electronic Transmission of Prescriptions (ETP) data service
+  description: |-
+    ## Overview
+    Use this API to search for dispensers that use the Electronic Prescription Service (EPS).
+
+    ## Technology
+    This API is [RESTful](https://digital.nhs.uk/developer/guides-and-documentation/api-technologies-at-nhs-digital#basic-rest-apis).
+
+    ## Network access
+    This API is available on the internet. An API key is required to access this API. Information on how to obtain an API key can be found on the [NHS website developer portal](https://developer.api.nhs.uk/).
   contact:
     url: 'https://digital.nhs.uk/developer/help-and-support'
     email: api.management@nhs.net
@@ -16,32 +25,43 @@ servers:
 paths:
   /SearchByName:
     get:
-      tags:
-        - SearchByName
       summary: Search dispensers by name
-      description: This method retrieves the first 25 pharmacies / Appliance contractors (in alphabetical order) with a name LIKE the one entered and the service type / EPS status chosen. It is a non-geographical search i.e name only for virtual pharmacies or appliance contractors. The match is based on the first part of the stored name. An example would be a search for 'Coens' will return 'Coens Plc' but not 'The Coens Chemist'. This is not a geographical search and will return any dispensaries within England that meet the name criteria.
+      description: |-
+        Get the first 25 dispensers matching the given name.
+
+        The name will be a match if the dispenser name **starts with** the given `organisationName` value. For example, a search on 'Coens' could return a dispenser with the name of 'Coens Plc' but not with the name of 'The Coens Chemist'.
+
+        The returned list is filtered by the specified service type and whether the dispenser uses EPS. The list is ordered alphabetically by the dispenser name.
+
+        This is not a geographical search and will return any dispensaries within England that meet the search criteria.
       operationId: SearchByName
       parameters:
         - name: organisationName
           in: query
-          description: The name of the pharmacy to search on (e.g. Boots)
+          description: The name of the dispenser to search on (e.g. 'Boots')
           required: true
           schema:
             type: string
         - name: serviceType
           in: query
-          description: The service type to search for (i.e. Community Pharmacy (inc. Internet) (1) or Appliance (2))
+          description: |-
+            The service type to search for. Value is either:
+             * '1' for Community Pharmacy (including Internet Pharmacy), or
+             * '2' for Dispensing Appliance Contractor.
           required: true
           schema:
             type: string
         - name: eps
           in: query
-          description: Eps - Retrieve EPS enabled/ disabled. dispensers (YES/ NO) - The default value will be YES.
+          description: |-
+            Value indicating whether to include dispensers using EPS. Value is either:
+             * 'YES' to include only dispensers using EPS (default), or
+             * 'NO' to include only dispensers not using EPS.
           schema:
             type: string
       responses:
         '200':
-          description: 'The following is a digest of the returned data - Dispensing Site ODS Code, Site Name, Site contact details (telephone & fax), Site Address and postcode, URL, EPS Status, Service Type, Services it provides and Opening Times. The results will be ordered alphabetically using the dispensary name.'
+          description: Successful response
           content:
             application/json:
               schema:
@@ -49,16 +69,25 @@ paths:
                 items:
                   $ref: '#/components/schemas/pharmacyModel'
         '400':
-          description: If any of required parameters are not provided
+          description: One or more of the required parameters were not provided
   /SearchByNameAndLocation:
     get:
-      tags:
-        - SearchByNameAndLocation
-      summary: Search dispensers by Name and Location
-      description: 'This method retrieves pharmacies / Appliance contractors with the address /post code specified that have a name LIKE the one entered, and the service type / EPS status chosen. This search will match on either part postcode or town (if both are supplied the postcode will be used). Please note that this search will match against the town name or part postcode. For example, if a part postcode of LS1 is entered, the search will only return dispensaries within LS1, no dispensaries in surrounding postcodes will be returned even if there are less than 25 in the supplied part postcode results. For a match against the name the first part of the stored name is used, for example, a search for ''Coens'' should return ''Coens Plc'' but not ''The Coens Chemist''.'
+      summary: Search dispensers by name and location
+      description: |-
+        Get the first 25 dispensers matching the given `organisationName` and either the given `partPostcode` or `location`.
+
+        The name will be a match if the dispenser name **starts with** the given `organisationName` value. For example, a search on 'Coens' could return a dispenser with the name of 'Coens Plc' but not with the name of 'The Coens Chemist'.
+
+        The part postcode will be a match if the dispenser postcode **starts with** the given `partPostcode` value. For example, a search on 'LS1' could return a dispenser with postcode 'LS1 4DT' or with postcode 'LS11 8BB'. No dispensaries in surrounding postcodes will be returned even if there are less than 25 in the supplied part postcode results.
+
+        The location will be a match if any of the four lines of the dispenser's address **contain** the given `location` value. For example, a search on 'Derby' could return a dispenser with an address line of 'Derby', or 'Derbyshire', or '13 Derby Street'.
+
+        The returned list is filtered by the specified service type and whether the dispenser uses EPS. The list is ordered alphabetically by the dispenser name.
+
+        This is not a geographical search and will return any dispensaries within England that meet the search criteria.
       operationId: SearchByNameAndLocation
       parameters:
-        - name: OrganisationName
+        - name: organisationName
           in: query
           description: The name of the pharmacy to search on (e.g. Boots)
           required: true
@@ -71,23 +100,29 @@ paths:
             type: string
         - name: location
           in: query
-          description: Street name or Town name to search
+          description: Street name or town name to search
           schema:
             type: string
         - name: serviceType
           in: query
-          description: The service type to search for (i.e. Community Pharmacy (inc. Internet) (1) or Appliance (2))
+          description: |-
+            The service type to search for. Value is either:
+             * '1' for Community Pharmacy (including Internet Pharmacy), or
+             * '2' for Dispensing Appliance Contractor.
           required: true
           schema:
             type: string
         - name: eps
           in: query
-          description: Eps - Retrieve EPS enabled/ disabled. dispensers (YES/ NO) - The default value will be YES.
+          description: |-
+            Value indicating whether to include dispensers using EPS. Value is either:
+             * 'YES' to include only dispensers using EPS (default), or
+             * 'NO' to include only dispensers not using EPS.
           schema:
             type: string
       responses:
         '200':
-          description: 'The following is a digest of the returned data- Dispensing Site ODS Code, Site Name, Site contact details (telephone & fax), Site Address and postcode, URL, EPS Status, Service Type, Distance from supplied postcode, Services it provides and Opening Times. The results will be ordered by distance from the supplied postcode with the nearest appearing first in the list.'
+          description: Successful response
           content:
             application/json:
               schema:
@@ -95,41 +130,46 @@ paths:
                 items:
                   $ref: '#/components/schemas/pharmacyModel'
         '400':
-          description: If any of required parameters are not provided
+          description: One or more of the required parameters were not provided
   /SearchByOdsCode:
     get:
-      tags:
-        - SearchByOdsCode
       summary: Get dispenser by ODS code
-      description: 'Occasionally you may not wish to search for a dispenser by name or location as the ODS code of a local pharmacy may already be known. This procedure is used to validate that the ODS code entered is a valid dispenser. It returns pertinent information about the dispenser to allow the end user to validate that the ODS code relates to the dispenser they intended. The information returned will include whether the dispenser is EPS enabled. This procedure will only return organisations registered as dispensers (i.e. if a valid ODS code is supplied but it is not registered as a dispenser, then no data will be returned).'
+      description: |-
+        Get the single dispenser with the requested ODS code.
+
+        If the ODS code of a dispenser is already known, this endpoint can be used to:
+         * Verify that the ODS code is for a valid dispenser. Only    organisations registered as a dispenser will be returned    (i.e. if a valid ODS code is supplied but it is not    registered as a dispenser, then no data will be    returned).
+         * Check that the ODS code is for the intended dispenser,    e.g. the returned organisation has the expected name and    address.
+         * Confirm that the dispenser uses EPS
       operationId: SearchByOdsCode
       parameters:
-        - name: odscode
+        - name: odsCode
           in: query
-          description: 'Valid ODS Code (e.g. FLH84,FHH81,FW866)'
+          description: 'Valid ODS Code (e.g. FLH84, FHH81, FW866)'
           required: true
           schema:
             type: string
       responses:
         '200':
-          description: 'The following is a digest of the returned data. Dispensing Site ODS Code, Site Name, Site contact details (telephone & fax), Site Address and postcode, URL, EPS Status, Service Type, Services it provides and Opening Times.'
+          description: Successful response
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/pharmacyModel'
         '204':
-          description: OdsCode not found
+          description: The ODS code was not found or is not for a dispenser
         '400':
-          description: If the OdsCode is null or empty
+          description: The ODS code is null or empty
   /SearchByPostcode:
     get:
-      tags:
-        - SearchByPostcode
       summary: Search dispensers by postcode
-      description: This method retrieves the 25 nearest pharmacies/appliance contractors to the supplied postcode and the service type/EPS status chosen.
+      description: |-
+        Get the first 25 nearest dispensers to the given postcode.
+
+        The returned list is filtered by the specified service type and whether the dispenser uses EPS. The list is ordered by distance from the given postcode.
       operationId: SearchByPostcode
       parameters:
-        - name: fullpostcode
+        - name: fullPostcode
           in: query
           description: Full postcode to search on
           required: true
@@ -137,18 +177,24 @@ paths:
             type: string
         - name: serviceType
           in: query
-          description: The service type to search for (i.e. Community Pharmacy (inc. Internet) (1) or Appliance (2))
+          description: |-
+            The service type to search for. Value is either:
+             * '1' for Community Pharmacy (including Internet Pharmacy), or
+             * '2' for Dispensing Appliance Contractor.
           required: true
           schema:
             type: string
         - name: eps
           in: query
-          description: Eps - Retrieve EPS enabled/ disabled. dispensers (YES/ NO) - The default value will be YES.
+          description: |-
+            Value indicating whether to include dispensers using EPS. Value is either:
+             * 'YES' to include only dispensers using EPS (default), or
+             * 'NO' to include only dispensers not using EPS.
           schema:
             type: string
       responses:
         '200':
-          description: 'The following is a digest of the returned data. Dispensing Site ODS Code, Site Name, Site contact details (telephone & fax), Site Address and postcode, URL, EPS Status, Service Type, Services it provides and Opening Times. The results will be ordered by distance from the supplied postcode with the nearest appearing first in the list.'
+          description: Successful response
           content:
             application/json:
               schema:
@@ -156,86 +202,205 @@ paths:
                 items:
                   $ref: '#/components/schemas/pharmacyModel'
         '400':
-          description: If any of required parameters are not provided
+          description: One or more of the required parameters were not provided
   /SearchInternetPharmacy:
     get:
-      tags:
-        - SearchInternetPharmacy
       summary: Get all internet pharmacies
-      description: Get all internet pharmacies
+      description: |-
+        Get all internet pharmacies providing services in England.
+
+        The returned list is ordered alphabetically by the dispenser name
       operationId: SearchInternetPharmacy
       responses:
         '200':
-          description: 'The following is a digest of the returned data- Dispensing Site ODS Code, Site Name, Site contact details (telephone & fax), Site Address and postcode, URL, EPS Status, Service Type, Services it provides and Opening Times. The results will be ordered alphabetically using the dispensary name.'
+          description: Successful response
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/pharmacyModel'
+                  $ref: '#/components/schemas/internetPharmacyModel'
 components:
   schemas:
+    internetPharmacyModel:
+      type: object
+      properties:
+        organisationCode:
+          type: string
+          description: ODS code for the dispensing site.
+        name:
+          type: string
+          description: Name of the dispensing site.
+        phone:
+          type: string
+          description: 'Telephone number of the dispensing site, if available.'
+          nullable: true
+        fax:
+          type: string
+          description: 'Fax number of the dispensing site, if available.'
+          nullable: true
+        street:
+          type: string
+          description: 'First address line of the dispensing site, if available.'
+          nullable: true
+        locality:
+          type: string
+          description: 'Second address line of the dispensing site, if available.'
+          nullable: true
+        town:
+          type: string
+          description: 'Third address line of the dispensing site, if available.'
+          nullable: true
+        administrative:
+          type: string
+          description: 'Fourth address line of the dispensing site, if available.'
+          nullable: true
+        postcode:
+          type: string
+          description: 'Postcode of the dispensing site, if available.'
+          nullable: true
+        url:
+          type: string
+          description: 'URL for the website of the dispenser, if available.'
+          nullable: true
+        eps:
+          type: boolean
+          description: |-
+            Value indicating if the dispensing site uses EPS.  
+            Value is true if uses EPS, otherwise false.
+        serviceType:
+          type: string
+          description: |-
+            Type of service provided by the dispensing site. Value is either:
+             * '1' for Community Pharmacy (including Internet Pharmacy), or
+             * '2' for Dispensing Appliance Contractor.
+        services:
+          type: array
+          items:
+            $ref: '#/components/schemas/serviceModel'
+          description: List of services provided by the dispensing site.
     openingTimesModel:
       type: object
       properties:
         weekDay:
           type: string
+          description: |-
+            Day of the week, e.g. 'Monday'.  
+            Value is undefined if `openingTimeType` is 'Additional'.
+          nullable: true
         times:
           type: string
+          description: |-
+            Opening times range in format 'hh:mm-hh:mm', e.g. '09:00-12:00'.  
+            Value is undefined if `isOpen` is false.
+          nullable: true
         offsetOpeningTime:
           type: string
+          description: |-
+            Opening time as number of minutes since midnight.  
+            Value is undefined if `isOpen` is false.
+          nullable: true
         offsetClosingTime:
           type: string
+          description: |-
+            Closing time as number of minutes since midnight.  
+            Value is undefined if `isOpen` is false.
+          nullable: true
         openingTimeType:
           type: string
+          description: |-
+            Type of opening time session. Value is either:
+             * 'General' for normal opening times by day of week, or
+             * 'Additional' for opening times for the specific date in `additionalOpeningDate`.
         additionalOpeningDate:
           type: string
+          description: |-
+            Date for additional opening times, such as bank holiday opening times, which replace the normal opening times on this date.  
+            Date is in format 'MMM  d YYYY', e.g. 'Apr 15 2022', 'Jun  2 2022'. Note that there may be an extra space between the month name and the day of the month if the day of the month is a single digit.  
+            Value is undefined if `openingTimeType` is 'General'.
+          nullable: true
         isOpen:
           type: boolean
+          description: |-
+            Value indicating if the service is open or closed on either the day of the week specified in `weekDay` or the date specified in `additionalOpeningDate`.  
+            Value is true if open, otherwise false.
     pharmacyModel:
       type: object
       properties:
         organisationCode:
           type: string
+          description: ODS code for the dispensing site.
         name:
           type: string
+          description: Name of the dispensing site.
         phone:
           type: string
+          description: 'Telephone number of the dispensing site, if available.'
+          nullable: true
         fax:
           type: string
+          description: 'Fax number of the dispensing site, if available.'
+          nullable: true
         street:
           type: string
+          description: 'First address line of the dispensing site, if available.'
+          nullable: true
         locality:
           type: string
+          description: 'Second address line of the dispensing site, if available.'
+          nullable: true
         town:
           type: string
+          description: 'Third address line of the dispensing site, if available.'
+          nullable: true
         administrative:
           type: string
+          description: 'Fourth address line of the dispensing site, if available.'
+          nullable: true
         postcode:
           type: string
+          description: 'Postcode of the dispensing site, if available.'
+          nullable: true
         url:
           type: string
+          description: 'URL for the website of the dispenser, if available.'
+          nullable: true
         eps:
           type: boolean
+          description: |-
+            Value indicating if the dispensing site uses EPS.  
+            Value is true if uses EPS, otherwise false.
         serviceType:
           type: string
+          description: |-
+            Type of service provided by the dispensing site. Value is either:
+             * '1' for Community Pharmacy (including Internet Pharmacy), or
+             * '2' for Dispensing Appliance Contractor.
         distance:
           type: number
+          description: Approximate straight line distance in miles from the search location to the dispensing site. Only applicable for a geographical search.
           format: double
         services:
           type: array
           items:
             $ref: '#/components/schemas/serviceModel'
+          description: List of services provided by the dispensing site.
         openingTimes:
           type: array
           items:
             $ref: '#/components/schemas/openingTimesModel'
+          description: List of opening times of the dispensing site.
     serviceModel:
       type: object
       properties:
         serviceName:
           type: string
+          description: Name of the service.
         serviceCode:
           type: string
+          description: NHS Website service reference code. Can be used with some NHS Website APIs.
         serviceProvider:
           type: string
+          description: |-
+            String representation of a JSON object containing details of the service provider, if the service is not directly provided by the dispenser.  
+            In almost all cases no additional service provider details are available, and the value will contain the string representation of an empty object, i.e. '{}'.
