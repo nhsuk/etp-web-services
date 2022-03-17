@@ -279,6 +279,26 @@ components:
           items:
             $ref: '#/components/schemas/serviceModel'
           description: List of services provided by the dispensing site.
+      example:
+        organisationCode: FM813
+        name: Online Pharmacy
+        phone: 01234 567890
+        fax: null
+        street: 123 West Drive
+        locality: Beeston
+        town: Broxtowe
+        administrative: Nottinghamshire
+        postcode: NG7 2QW
+        url: 'https://example.com'
+        eps: true
+        serviceType: '1'
+        services:
+          - serviceName: 'Pharmacy Service: Multi-lingual staff'
+            serviceCode: SRV0524
+            serviceProvider: '{}'
+          - serviceName: 'Pharmacy Service: Prescription delivery service'
+            serviceCode: SRV0522
+            serviceProvider: '{}'
     openingTimesModel:
       type: object
       properties:
@@ -324,6 +344,14 @@ components:
           description: |-
             Value indicating if the service is open or closed on either the day of the week specified in `weekDay` or the date specified in `additionalOpeningDate`.  
             Value is true if open, otherwise false.
+      example:
+        weekDay: Monday
+        times: '09:00-17:00'
+        offsetOpeningTime: '540'
+        offsetClosingTime: '1020'
+        openingTimeType: General
+        additionalOpeningDate: ''
+        isOpen: true
     pharmacyModel:
       type: object
       properties:
@@ -390,6 +418,52 @@ components:
           items:
             $ref: '#/components/schemas/openingTimesModel'
           description: List of opening times of the dispensing site.
+      example:
+        organisationCode: FX987
+        name: ABC Pharmacy
+        phone: 01234 567890
+        fax: null
+        street: 123 West Drive
+        locality: Beeston
+        town: Broxtowe
+        administrative: Nottinghamshire
+        postcode: NG7 2QW
+        url: 'https://example.com'
+        eps: true
+        serviceType: '1'
+        distance: 0.123456789
+        services:
+          - serviceName: 'Pharmacy Service (NHS): Minor ailment service'
+            serviceCode: SRV0198
+            serviceProvider: '{}'
+          - serviceName: 'Pharmacy Service (NHS): Medication review service'
+            serviceCode: SRV0261
+            serviceProvider: '{}'
+          - serviceName: 'Pharmacy Service (NHS): Stop smoking service'
+            serviceCode: SRV0273
+            serviceProvider: '{}'
+        openingTimes:
+          - weekDay: Monday
+            times: '09:00-17:00'
+            offsetOpeningTime: '540'
+            offsetClosingTime: '1020'
+            openingTimeType: General
+            additionalOpeningDate: ''
+            isOpen: true
+          - weekDay: ''
+            times: '12:00-18:00'
+            offsetOpeningTime: '12:00'
+            offsetClosingTime: '18:00'
+            openingTimeType: Additional
+            additionalOpeningDate: Apr  1 2022
+            isOpen: true
+          - weekDay: ''
+            times: ''
+            offsetOpeningTime: ''
+            offsetClosingTime: ''
+            openingTimeType: Additional
+            additionalOpeningDate: Apr 15 2022
+            isOpen: false
     serviceModel:
       type: object
       properties:
@@ -404,3 +478,7 @@ components:
           description: |-
             String representation of a JSON object containing details of the service provider, if the service is not directly provided by the dispenser.  
             In almost all cases no additional service provider details are available, and the value will contain the string representation of an empty object, i.e. '{}'.
+      example:
+        serviceName: 'Pharmacy Service (NHS): Minor ailment service'
+        serviceCode: SRV0198
+        serviceProvider: '{}'
